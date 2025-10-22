@@ -1,3 +1,6 @@
+<div *ngIf="loading$ | async" class="spinner-overlay">
+  <mat-spinner diameter="50"></mat-spinner>
+</div>
 <mat-card class="converter-card">
   <mat-card-title>Currency Converter</mat-card-title>
   <hr />
@@ -76,12 +79,10 @@
 
     <!-- Result -->
     <div class="result" *ngIf="result !== null">
-      <h3>Converted Amount: {{ result | number : "1.2-4" }}</h3>
-    </div>
-
-    <!-- Loader -->
-    <div class="loader" *ngIf="isLoading">
-      <mat-spinner diameter="40"></mat-spinner>
+      <h3>
+        Converted Amount: <br />
+        {{ convertedResult }}
+      </h3>
     </div>
   </form>
 </mat-card>

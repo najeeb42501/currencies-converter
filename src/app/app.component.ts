@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CurrencyService } from './services/currency.service';
 import { HistoryService } from './services/history.service';
+import { LoadingSpinnerService } from './services/loading-spinner.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -10,18 +12,22 @@ import { HistoryService } from './services/history.service';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-  converterForm!: FormGroup;
-  currencies: string[] = [];
-  result: number | null = null;
-  isLoading = false;
-
   constructor(
     private fb: FormBuilder,
     private currencyService: CurrencyService,
-    private historyService: HistoryService
+    private historyService: HistoryService,
+    private loadingService: LoadingSpinnerService
   ) {}
 
+  converterForm!: FormGroup;
+  currencies: string[] = [];
+  result: number | null = null;
+  lastConversion!: { amount: number; fromCurrency: string; toCurrency: string };
+  isLoading = false;
+  loading$!: Observable<boolean>;
+
   ngOnInit() {
+    this.loading$ = this.loadingService.loading$;
     this.loadCurrencies();
     this.initForm();
   }
@@ -62,13 +68,8 @@ export class AppComponent implements OnInit {
         next: (res) => {
           this.isLoading = false;
           this.result = res.result;
+          this.lastConversion = { amount, fromCurrency, toCurrency };
           this.saveToHistory();
-          this.converterForm.reset({
-            fromCurrency: null,
-            toCurrency: null,
-            amount: null,
-            date: null,
-          });
         },
         error: (err) => {
           this.isLoading = false;
@@ -92,5 +93,13 @@ export class AppComponent implements OnInit {
 
   get f() {
     return this.converterForm.controls;
+  }
+
+  get convertedResult(): string {
+    if (!this.result || !this.lastConversion) return '';
+    const { amount, fromCurrency, toCurrency } = this.lastConversion;
+    return `${amount} ${fromCurrency} = ${this.result.toFixed(
+      4
+    )} ${toCurrency}`;
   }
 }
