@@ -1,0 +1,66 @@
+<mat-card class="history-card">
+  <mat-card-title>Conversion History</mat-card-title>
+
+  <!-- Table when history exists -->
+  <div class="table-wrapper" *ngIf="history.length > 0">
+    <table
+      mat-table
+      [dataSource]="history"
+      class="mat-elevation-z8 history-table"
+    >
+      <ng-container matColumnDef="from">
+        <th mat-header-cell *matHeaderCellDef>From</th>
+        <td mat-cell *matCellDef="let h">{{ h.from }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="to">
+        <th mat-header-cell *matHeaderCellDef>To</th>
+        <td mat-cell *matCellDef="let h">{{ h.to }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef>Amount</th>
+        <td mat-cell *matCellDef="let h">{{ h.amount }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="result">
+        <th mat-header-cell *matHeaderCellDef>Result</th>
+        <td mat-cell *matCellDef="let h">{{ h.result | number : "1.2-4" }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="dateUsed">
+        <th mat-header-cell *matHeaderCellDef>Date</th>
+        <td mat-cell *matCellDef="let h">{{ h.dateUsed }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="time">
+        <th mat-header-cell *matHeaderCellDef>Time</th>
+        <td mat-cell *matCellDef="let h">{{ h.time }}</td>
+      </ng-container>
+
+      <tr
+        mat-header-row
+        *matHeaderRowDef="[
+          'from',
+          'to',
+          'amount',
+          'result',
+          'dateUsed',
+          'time'
+        ]"
+      ></tr>
+      <tr
+        mat-row
+        *matRowDef="
+          let row;
+          columns: ['from', 'to', 'amount', 'result', 'dateUsed', 'time']
+        "
+      ></tr>
+    </table>
+  </div>
+
+  <!-- Message when no history -->
+  <div class="no-history" *ngIf="history.length === 0">
+    <p>No conversion history found.</p>
+  </div>
+</mat-card>

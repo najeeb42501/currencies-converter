@@ -1,0 +1,40 @@
+.converter-card {
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 1rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.button-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.result {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+@media (max-width: 600px) {
+  .converter-card {
+    margin: 20px;
+  }
+  .form-row {
+    flex-direction: column;
+  }
+}
